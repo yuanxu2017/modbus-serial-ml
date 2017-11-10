@@ -32,7 +32,7 @@ easy to deploy and maintain.
 #### Install
 
 ```
-npm install qz-modbus-serial
+npm install modbus-serial
 ```
 
 For use over serial port (ModbusRTU), also install node-serialport:
