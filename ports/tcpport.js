@@ -155,17 +155,17 @@ TcpPort.prototype.setupReconnector = function () {
         if(this.openFlag){
             if(!this.connected && !this.connecting){
                 console.log('Modebus TCP reconnect to server...'+this.ip +":"+this.port);
-                // if(this._client){
-                //     // this._client.removeAllListeners();
-                //     // this._client.end();
-                //     // this._client.destroy();
-                //     // delete this._client;
-                //     // this._client = null;
-                //     // this.ReleasePort(this.port);
-                // }
+                 if(this._client){
+                      this._client.removeAllListeners();
+                      this._client.end();
+                      this._client.destroy();
+                      delete this._client;
+                      this._client = null;
+                      this.ReleasePort(this.port);
+                 }
                 //
                 // process.exit(0);
-                // this._client = new net.Socket();
+                 this._client = new net.Socket();
 
                 this.connect();
             }
@@ -184,14 +184,20 @@ TcpPort.prototype.ReleasePort = function (port) {
 
         stdout.split('\n').filter(function(line){
             var p=line.trim().split(/\s+/);
-            var address=p[1];
+            var address=p[3];
+            var pid = undefined;
+
+            if(p[6] && p[6].split('/')[0]){
+                pid = p[6].split('/')[0];
+            }
 
             console.error(JSON.stringify(p));
 
-            if(address!=undefined){
-                if(address.split(':')[1]==port)
+            if(address!=undefined && pid != undefined){
+                var addressArr = address.split(':');
+                if(addressArr[1] && addressArr[1].length && addressArr[1].length>1 && addressArr[1]==port && (p[6].split('/')[0] != process.pid))
                 {
-                    exec('kill /F /pid '+p[4],function(err, stdout, stderr){
+                    exec('kill -9 '+pid,function(err, stdout, stderr){
                         if(err){
                             return console.error('not killed',port);
                         }
