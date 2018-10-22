@@ -152,7 +152,7 @@ TcpPort.prototype.setupReconnector = function () {
 
     setInterval(function(){
         // console.log("openFlag:",this.openFlag,"connected:",this.connected,"connecting:",this.connecting);
-        if(this.openFlag){
+       // if(this.openFlag){
             if(!this.connected && !this.connecting){
                 console.log('Modebus TCP reconnect to server...'+this.ip +":"+this.port);
                  if(this._client){
@@ -169,7 +169,7 @@ TcpPort.prototype.setupReconnector = function () {
 
                 this.connect();
             }
-        }
+        //}
 
     }.bind(this),3000);
 };
