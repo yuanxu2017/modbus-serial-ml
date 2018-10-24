@@ -62,7 +62,7 @@ var ComOverTcpPort = function(ip_port, options) {
             // emit a data signal
             modbus.emit('data', buffer);
         }else{
-            console.error('recv data before write!!',data);
+            console.error('ComOverTcpPort recv data before write!!',data);
         }
 
     }.bind(this));
@@ -96,12 +96,23 @@ util.inherits(ComOverTcpPort, EventEmitter);
 
 ComOverTcpPort.prototype.setupReconnector = function () {
     setInterval(function(){
-        //if(this.openFlag){
+       // if(this.openFlag){
             if(!this.connected && !this.connecting){
-                console.log('reconnect to server...'+this.ip +":"+this.port);
+                console.log('ComOverTcpPort reconnect to server...'+this.ip +":"+this.port);
+                if(this._client){
+                    this._client.removeAllListeners();
+                    this._client.end();
+                    this._client.destroy();
+                    delete this._client;
+                    this._client = null;
+                    this.ReleasePort(this.port);
+                }
+
+                // process.exit(0);
+                this._client = new net.Socket();
                 this.connect();
             }
-        //}
+       // }
 
     }.bind(this),3000);
 
@@ -167,4 +178,41 @@ ComOverTcpPort.prototype.write = function (data) {
 
 };
 
+ComOverTcpPort.prototype.ReleasePort = function (port) {
+    var cmd='netstat -anp | grep '+port;//process.platform=='win32'?'netstat -ano':'ps aux';
+
+    var port=port;
+
+    exec(cmd, function(err, stdout, stderr) {
+        if(err){ return console.log(err.message); }
+
+        stdout.split('\n').filter(function(line){
+            var p=line.trim().split(/\s+/);
+            var address=p[3];
+            var pid = undefined;
+
+            if(p[6] && p[6].split('/')[0]){
+                pid = p[6].split('/')[0];
+            }
+
+            console.error(JSON.stringify(p));
+
+            if(address!=undefined && pid != undefined){
+                var addressArr = address.split(':');
+                if(addressArr[1] && addressArr[1].length && addressArr[1].length>1 && addressArr[1]==port && (p[6].split('/')[0] != process.pid))
+                {
+                    exec('kill -9 '+pid,function(err, stdout, stderr){
+                        if(err){
+                            return console.error('not killed',port);
+                        }
+
+                        console.error('killed ',port);
+                    });
+                }
+            }
+        });
+    });
+};
+
 module.exports = ComOverTcpPort;
+
