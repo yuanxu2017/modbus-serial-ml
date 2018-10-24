@@ -96,12 +96,12 @@ util.inherits(ComOverTcpPort, EventEmitter);
 
 ComOverTcpPort.prototype.setupReconnector = function () {
     setInterval(function(){
-        if(this.openFlag){
+        //if(this.openFlag){
             if(!this.connected && !this.connecting){
                 console.log('reconnect to server...'+this.ip +":"+this.port);
                 this.connect();
             }
-        }
+        //}
 
     }.bind(this),3000);
 
