@@ -10,6 +10,7 @@ var net = require('net');
 var MODBUS_PORT = 4001; // modbus port
 var MAX_TRANSACTIONS = 64; // maximum transaction to wait for
 var ModbusRTU = require('modbus-serial');
+const exec = require('child_process').exec;
 
 /**
  * Simulate a modbus-RTU port using modbus-TCP connection
