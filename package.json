@@ -1,0 +1,23 @@
+{
+  "name": "modbus-serial-ml",
+  "version": "1.2.2",
+  "description": "A pure JavaScript implemetation of MODBUS-RTU (and TCP) master for NodeJS !!! this is a forked version !!! in the original version, the parser only check and parse one piece of data, which means an error will occur if the data is emitted more than once.",
+  "main": "index.js",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuanxu2017/modbus-serial-ml.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yuanxu2017/modbus-serial-ml/issues"
+  },
+  "homepage": "https://github.com/yuanxu2017/modbus-serial-ml#readme"
+}
