@@ -109,9 +109,9 @@ ComOverTcpPort.prototype.setupReconnector = function () {
                     this.ReleasePort(this.port);
                 }
 
-                // process.exit(0);
-                this._client = new net.Socket();
-                this.connect();
+                process.exit(1);
+                // this._client = new net.Socket();
+                // this.connect();
             }
        // }
 
